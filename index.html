@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations!</title>
+</head>
+<body>
+
+<div id="congratsMessage" style="display: none;">
+    <h1>Congratulations, <span id="studentName"></span>!</h1>
+    <p>You have been accepted into the club!</p>
+    <button onclick="sendResponse('accept')">Accept</button>
+    <button onclick="sendResponse('deny')">Deny</button>
+</div>
+
+<!-- Import the Firebase initialization script -->
+<script type="module" src="firebaseInit.js"></script>
+
+<!-- Script for handling student response -->
+<script type="module">
+    import { db } from './firebaseInit.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get('id');
+
+    if (studentId) {
+        db.collection('students').doc(studentId).get().then((doc) => {
+            if (doc.exists) {
+                const studentData = doc.data();
+                document.getElementById('studentName').innerText = studentData.name;
+                document.getElementById('congratsMessage').style.display = 'block';
+            }
+        });
+    }
+
+    function sendResponse(response) {
+        db.collection('students').doc(studentId).update({
+            response: response
+        }).then(() => {
+            window.location.href = "thanks.html";
+        });
+    }
+</script>
+
+</body>
+</html>
