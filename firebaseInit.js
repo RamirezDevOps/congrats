@@ -18,4 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);  // Initialize Firestore
 
+console.log('From firebaseInit.js:', db);
+
 export { db };  // This makes the Firestore instance available to other modules
